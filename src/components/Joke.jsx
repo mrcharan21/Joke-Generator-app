@@ -1,4 +1,3 @@
-
 import React from "react";
  
 import Button from "./Button";
@@ -6,21 +5,24 @@ import '../assets/joke.css';
 
 const Joke = () => {
     const [Joke, setJoke] = React.useState("");
+    const [loading, setLoading] = React.useState(false);
 
     const fetchApi = () => {
-       // fetch("https://sv443.net/jokeapi/v2/joke/Programming?type=single")
-       fetch(`https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit
-`)
+        setLoading(true);
+        fetch("https://official-joke-api.appspot.com/random_joke")
             .then((res) => res.json())
-            .then((data) => setJoke(data.joke));
-    };
+            .then((data) => {
+            setJoke(data.setup + " " + data.punchline);
+            setLoading(false);
+            });
+    }
 
     return (
         <div className="joke">
             <Button callApi={fetchApi} /> 
-            <p>{Joke}</p>    
+            <p>{loading ? "Loading..." : Joke}</p>    
         </div>
     );
-}
+};
 
 export default Joke;
